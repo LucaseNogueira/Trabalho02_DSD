@@ -5,8 +5,10 @@ import javax.swing.JOptionPane;
 import utils.Leitor;
 
 /**
- *
+ * Método principal de inciação do sistema
+ * 
  * @author lucas
+ * @since 2022
  */
 public class main {
     
