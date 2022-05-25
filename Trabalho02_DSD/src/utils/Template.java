@@ -11,7 +11,11 @@ package utils;
  */
 public class Template {
     
-    private final String template = "Nimbus";
+    private final String template;
+
+    public Template() {
+        this.template = "Nimbus";
+    }
     
     public void iniciarTema() {               
            try {
