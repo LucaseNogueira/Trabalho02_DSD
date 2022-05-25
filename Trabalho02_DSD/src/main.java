@@ -3,11 +3,14 @@ import java.io.File;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import utils.Leitor;
+import utils.Template;
 
 /**
  * Método principal de inciação do sistema
  * 
  * @author lucas
+ * @author Fabio Frare
+ * 
  * @since 2022
  */
 public class main {
@@ -16,6 +19,10 @@ public class main {
     public static final String NOME_TRABALHO = "Trabalho02_DSD";
     
     public static void main(String[] args){
+        
+        Template template = new Template();
+        template.iniciarTema();
+        
         frame                   = new JFrame("JOptionPane");
         int    tipoBuscaArquivo = escolheTipoBuscaArquivo();
         String caminhoArquivo   = escolheCaminhoArquivo(tipoBuscaArquivo);
@@ -28,7 +35,7 @@ public class main {
         tipoBuscaArquivo[0]        = "Caminho do Arquivo";//Busca pelo caminho do arquivo;
         tipoBuscaArquivo[1]        = "Opções Padrões";    //Escolhe uma das opções padrões;
         
-        int opção = JOptionPane.showOptionDialog(
+        int opcao = JOptionPane.showOptionDialog(
                         frame,
                         "Escolha um Tipo de Busca de Arquivo",
                         NOME_TRABALHO,
@@ -38,7 +45,8 @@ public class main {
                         tipoBuscaArquivo,
                         null);
         
-        return opção;
+        
+        return opcao;
     }
     
     private static String escolheCaminhoArquivo(int tipoBuscaArquivo){
