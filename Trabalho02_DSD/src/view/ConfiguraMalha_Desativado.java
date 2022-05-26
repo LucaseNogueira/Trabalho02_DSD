@@ -13,12 +13,12 @@ import utils.Template;
  * 
  * @since 2022
  */
-public class ConfiguraMalha {
+public class ConfiguraMalha_Desativado {
     
     private static JFrame frame;
     public static final String NOME_TRABALHO = "Trabalho02_DSD";
 
-    public ConfiguraMalha() {
+    public ConfiguraMalha_Desativado() {
         defineTemplate();
         frame = new JFrame("JOptionPane");        
     }    

@@ -1,5 +1,7 @@
 
-import view.ConfiguraMalha;
+import java.io.IOException;
+import view.ConfiguraMalha_Desativado;
+
 
 /**
  * Classe responsável pela inciação do sistema.
@@ -11,14 +13,17 @@ import view.ConfiguraMalha;
  */
 public class main {
        
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException{
         
-        ConfiguraMalha configMalha = new ConfiguraMalha();
-        int    tipoBuscaArquivo    = configMalha.escolheTipoBuscaArquivo();
-        String caminhoArquivo      = configMalha.escolheCaminhoArquivo(tipoBuscaArquivo);
+        ConfiguraMalha_Desativado configMalha = new ConfiguraMalha_Desativado();
+//        int    tipoBuscaArquivo               = configMalha.escolheTipoBuscaArquivo();
+        String caminhoArquivo                 = configMalha.escolheCaminhoArquivo(configMalha.escolheTipoBuscaArquivo());
 
-        
-        System.exit(0);
+
+     
+
+
+//        System.exit(0);
     }
     
     
