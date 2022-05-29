@@ -35,7 +35,7 @@ public class Via {
     private boolean cruzamento;
     private boolean isRodovia;
     
-    private String    imagemPadrao;
+    private String    nome;
     private ImageIcon imagem;
     private Semaphore mutex;
     
@@ -49,6 +49,19 @@ public class Via {
             veiculo.setSentido(sentido);
             this.imagem  = new ImageIcon(ImagemUtil.getCaminhoImageIcon(veiculo.getNome(), veiculo.getSentido(), this.sentido));
             this.veiculo = veiculo;
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Via.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            mutex.release();
+        }
+    }
+    
+    public void retiraVeiculo(){
+        try {
+            mutex.acquire();
+            this.imagem  = new ImageIcon(ImagemUtil.getCaminhoImageIcon(nome));
+            this.veiculo = null;
         } catch (InterruptedException ex) {
             Logger.getLogger(Via.class.getName()).log(Level.SEVERE, null, ex);
         }
