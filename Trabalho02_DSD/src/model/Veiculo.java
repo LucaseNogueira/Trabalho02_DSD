@@ -13,8 +13,8 @@ import java.util.logging.Logger;
  */
 public class Veiculo extends Thread{
     
-    private int     linhaAtual;
-    private int     colunaAtual;
+    private int     linha;
+    private int     coluna;
     private int     sentido;
     private boolean visivel;
     private boolean rodando;
@@ -56,4 +56,21 @@ public class Veiculo extends Thread{
     public void setSentido(int sentido) {
         this.sentido = sentido;
     }
+
+    public int getLinha() {
+        return linha;
+    }
+
+    public void setLinha(int linha) {
+        this.linha = linha;
+    }
+
+    public int getColuna() {
+        return coluna;
+    }
+
+    public void setColuna(int coluna) {
+        this.coluna = coluna;
+    }
+    
 }

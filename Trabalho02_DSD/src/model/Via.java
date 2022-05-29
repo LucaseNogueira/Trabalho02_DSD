@@ -1,7 +1,10 @@
 package model;
 
 import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import utils.ImagemUtil;
 
 /**
  * Representa as viás tomadas pelos veiculos
@@ -26,6 +29,8 @@ public class Via {
     public static final int SENTIDO_CRUZAMENTO_BAIXO_ESQUERDA = 12;
     
     private int sentido;
+    private int linha;
+    private int coluna;
     
     private boolean cruzamento;
     private boolean isRodovia;
@@ -36,8 +41,19 @@ public class Via {
     
     private Veiculo   veiculo;
     
-    
-    public void adicionaVeiculoEstrada(Veiculo veiculo){
-        this.imagem = new ImageIcon("assets/" + veiculo.getNome()+imagemPadrao.replace("assets/", ""));
+    public void adicionaVeiculo(Veiculo veiculo){
+        try {
+            mutex.acquire();
+            veiculo.setLinha(linha);
+            veiculo.setColuna(coluna);
+            veiculo.setSentido(sentido);
+            this.imagem  = new ImageIcon(ImagemUtil.getCaminhoImageIcon(veiculo.getNome(), veiculo.getSentido(), this.sentido));
+            this.veiculo = veiculo;
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Via.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            mutex.release();
+        }
     }
 }
