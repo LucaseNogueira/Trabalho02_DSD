@@ -8,4 +8,6 @@ package model;
  */
 public class Malha {
     
+    private Via[] vias;
+    
 }
