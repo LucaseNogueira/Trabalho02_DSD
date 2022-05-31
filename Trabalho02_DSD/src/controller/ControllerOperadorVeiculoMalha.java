@@ -2,6 +2,8 @@
 package controller;
 
 import static java.lang.Thread.sleep;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,29 +74,62 @@ public class ControllerOperadorVeiculoMalha {
         
         while(!sucesso){
             try {
-                Random random = new Random();
-                int linha  = 0;
-                int coluna = 0;
+                Random random               = new Random();
+                int linha                   = 0;
+                int coluna                  = 0;
+                List<Integer> pontosPartida = new ArrayList<>();
+                int linhaColunaInicial;
                 this.veiculo.setSentido(random.nextInt(4) + 1);
                 switch(veiculo.getSentido()){
                     case Via.SENTIDO_CIMA:
 //                        sucesso = localidadeSpawn(Via.SENTIDO_CIMA);
                         linha  = malha.getLinhas();
                         coluna = malha.getColunas();
-                        
+                        for(int i = 0; i < coluna; i++){
+                            if(malha.getVia(linha, i).getSentido() == Via.SENTIDO_CIMA){
+                                pontosPartida.add(i);
+                            }
+                        }
+                        linhaColunaInicial = random.nextInt(pontosPartida.size());
+                        malha.getVia(linha, linhaColunaInicial).adicionaVeiculo(veiculo);
+                        sucesso = true;
                         break;
                     case Via.SENTIDO_DIREITA:
 //                        sucesso = localidadeSpawn(Via.SENTIDO_DIREITA);
                         linha  = malha.getLinhas();
+                        for(int i = 0; i < linha; i++){
+                            if(malha.getVia(i, coluna).getSentido() == Via.SENTIDO_DIREITA){
+                                pontosPartida.add(i);
+                            }
+                        }
+                        linhaColunaInicial = random.nextInt(pontosPartida.size());
+                        malha.getVia(linhaColunaInicial, coluna).adicionaVeiculo(veiculo);
+                        sucesso = true;
                         break;
                     case Via.SENTIDO_BAIXO:
-                        coluna = malha.getColunas();
 //                        sucesso = localidadeSpawn(Via.SENTIDO_BAIXO);
+                        coluna = malha.getColunas();
+                        for(int i = 0; i < coluna; i++){
+                            if(malha.getVia(linha, i).getSentido() == Via.SENTIDO_BAIXO){
+                                pontosPartida.add(i);
+                            }
+                        }
+                        linhaColunaInicial = random.nextInt(pontosPartida.size());
+                        malha.getVia(linha, linhaColunaInicial).adicionaVeiculo(veiculo);
+                        sucesso = true;
                         break;
                     case Via.SENTIDO_ESQUERDA:
 //                        sucesso = localidadeSpawn(Via.SENTIDO_ESQUERDA);
                         linha  = malha.getLinhas();
                         coluna = malha.getColunas();
+                        for(int i = 0; i < linha; i++){
+                            if(malha.getVia(i, coluna).getSentido() == Via.SENTIDO_ESQUERDA){
+                                pontosPartida.add(i);
+                            }
+                        }
+                        linhaColunaInicial = random.nextInt(pontosPartida.size());
+                        malha.getVia(linhaColunaInicial, coluna).adicionaVeiculo(veiculo);
+                        sucesso = true;
                         break;
                 }
                 sleep((long) this.veiculo.getIntervaloCriacao());
@@ -104,10 +139,6 @@ public class ControllerOperadorVeiculoMalha {
         }
         return sucesso;
     }
-    
-//    private boolean localidadeSpawn(int hemisferio){
-//        
-//    }
     
     private void gerenciarVias(int linha, int coluna){
         Via viaAtual = malha.getVia(veiculo.getLinha(), veiculo.getColuna());
