@@ -22,9 +22,10 @@ public class ControllerOperadorMalha {
     public static final int STATUS_EXECUCAO_PARADA     = 3;
     
     private int status;
-    private int qtdCarrosRodando;
-    private int qtdCarrosCriados;
-    private int qtdCarrosDestruidos;
+    private int qtdVeiculosRodando;
+    private int qtdVeiculosCriados;
+    private int qtdVeiculosDestruidos;
+    private int intervalo;
     
     private List<InterfaceObserver> observadores;
     
@@ -35,7 +36,7 @@ public class ControllerOperadorMalha {
     private ControllerOperadorMalha() {
         malha            = Malha.getInstance();
         status           = STATUS_EXECUCAO_PARADA;
-        qtdCarrosRodando = 0;
+        qtdVeiculosRodando = 0;
         observadores     = new ArrayList<>();
     }
     
@@ -44,6 +45,25 @@ public class ControllerOperadorMalha {
             instance = new ControllerOperadorMalha();
         }
         return instance;
+    }
+    
+    public void reset(){
+        qtdVeiculosRodando    = 0;
+        qtdVeiculosDestruidos = 0;
+        status              = STATUS_EXECUCAO_INICIADA;
+    }
+    
+    public void criarVeiculo(){
+        if(){
+            
+        }
+    }
+    
+    public void iniciaSimulacao(int qtd, int intervalo){
+        reset();
+        this.qtdVeiculosCriados = qtd;
+        this.intervalo        = intervalo;
+        criarVeiculos();
     }
     
     public void montaMalha(int[][] matriz){
@@ -91,8 +111,8 @@ public class ControllerOperadorMalha {
     }
     
     public void notificarSimulacaoEncerrada(){
-        qtdCarrosDestruidos++;
-        if ((qtdCarrosDestruidos == qtdCarrosCriados)) {
+        qtdVeiculosDestruidos++;
+        if ((qtdVeiculosDestruidos == qtdVeiculosCriados)) {
             for (InterfaceObserver observador : observadores) {
                 observador.notifyEncerrarSimulacao();
             }

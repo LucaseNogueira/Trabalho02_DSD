@@ -83,11 +83,10 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
     }
     
     private void configuraComponentes(){
-        jpBottomEsquerda.add(lblQtdVeiculos);
-        jpBottomEsquerda.add(lblIntervaloInsercao);
         
-        add(jpBottomEsquerda, BorderLayout.NORTH);
-        
+//        add(jpBottomEsquerda, BorderLayout.NORTH);
+        jpBottomDireita.add(lblQtdVeiculos);
+        jpBottomDireita.add(lblIntervaloInsercao);
         jpBottomDireita.add(jtfQtdVeiculos);
         jpBottomDireita.add(jtfIntervaloInsercao);
         jpBottomDireita.add(jbIniciar);
@@ -112,12 +111,52 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
         jpPrincipal.add(jtMalha);
 
         add(jpPrincipal, BorderLayout.CENTER);
+        
+        jbIniciar.addActionListener(this);
+        
+        jbEncerrar.setEnabled(false);
+        jbEncerrar.addActionListener(this);
+        
+        jtfQtdVeiculos.setName("Quantidade Veiculos");
+        jtfIntervaloInsercao.setName("Intervalo Inserção");
     }
 
     @Override
-    public void actionPerformed(ActionEvent arg0) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void actionPerformed(ActionEvent event) {
+        if(event.getSource() == jbIniciar){
+            actionPerformedIniciar();
+        }
+        else
+        if(event.getSource() == jbEncerrar){
+            actionPerformedEncerrar();
+        }
     }
+    
+    private void actionPerformedIniciar(){
+        if(validaJTextField(jtfQtdVeiculos) && validaJTextField(jtfIntervaloInsercao)){
+            int quantidadeVeiculos = Integer.parseInt(jtfQtdVeiculos.getText());
+            int intervalo          = Integer.parseInt(jtfIntervaloInsercao.getText());
+            controller.iniciaSimulacao(quantidadeVeiculos,intervalo);
+            jbEncerrar.setEnabled(true);
+        }
+    }
+    
+    private void actionPerformedEncerrar(){
+        jbEncerrar.setEnabled(false);
+    }
+    
+    private boolean validaJTextField(JTextField jtf){
+        boolean sucesso = !jtf.getText().equals("");
+        if(!sucesso){
+            JOptionPane.showMessageDialog(rootPane, "Intervalo invalido para o campo " + jtf.getName());
+        }
+        
+        return sucesso;
+    }
+
+//    private boolean validaTextField(JTextField jtfIntervaloInsercao) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
     
     class ViaTableModel extends AbstractTableModel {
 
@@ -167,16 +206,5 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
 
     @Override
     public void notifyEncerrarSimulacao() {
-//        JOptionPane.showMessageDialog(panelOpcoes, "Simulacao Encerrada\n"
-//                                                + "Quantidade de carros solicitados: " + gerenciador.getQuantidadeDeCarros() + "\n"
-//                                                + "Quantidade de carros criados: " + gerenciador.getCarrosSpawnados());
-//        jbIniciar.setEnabled(true);       
-//        jrbMonitor.setEnabled(true);
-//        jrbSemaforo.setEnabled(true);
-//        jtfQtdCarros.setEnabled(true);
-//        jbEncerrar.setEnabled(false);
-//        jtfQtdCarros.setText("");
-//        jtfIntervaloInsercao.setEnabled(true);
-//        jtfIntervaloInsercao.setText("");
     }
 }
