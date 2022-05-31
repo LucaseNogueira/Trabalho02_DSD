@@ -16,6 +16,7 @@ public class Veiculo extends Thread{
     private int     linha;
     private int     coluna;
     private int     sentido;
+    private int     intervaloCriacao;
     private boolean visivel;
     private boolean rodando;
     
@@ -23,6 +24,15 @@ public class Veiculo extends Thread{
     private Random  aceleracao;
     
     private ControllerOperadorVeiculoMalha operador;
+    
+    public Veiculo(){
+        defineNome();
+        this.linha   = 0;
+        this.coluna  = 0;
+        this.visivel = true;
+        this.rodando = false;
+        operador = new ControllerOperadorVeiculoMalha(this);
+    }
     
     @Override
     public void run(){
@@ -80,7 +90,32 @@ public class Veiculo extends Thread{
     public void setVisivel(boolean visivel) {
         this.visivel = visivel;
     }
+
+    public int getIntervaloCriacao() {
+        return intervaloCriacao;
+    }
+
+    public void setIntervaloCriacao(int intervaloCriacao) {
+        this.intervaloCriacao = intervaloCriacao;
+    }
     
-    
+    private void defineNome(){
+        Random random = new Random();
+        
+        switch(random.nextInt(4)){
+            case 0:
+                this.nome = "vaca";
+                break;
+            case 1:
+                this.nome = "ovelha";
+                break;
+            case 2:
+                this.nome = "galo";
+                break;
+            case 3:
+                this.nome = "porco";
+                break;
+        }
+    }
     
 }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import model.Malha;
+import model.Veiculo;
 import model.Via;
 import utils.ImagemUtil;
 
@@ -55,7 +56,9 @@ public class ControllerOperadorMalha {
     
     public void criarVeiculo(){
         if((qtdVeiculosRodando < qtdVeiculosCriados) && status == STATUS_EXECUCAO_INICIADA){
-            
+            Veiculo veiculo = new Veiculo();
+            veiculo.setIntervaloCriacao(this.intervalo);
+            veiculo.start();
         }
     }
     
@@ -63,7 +66,7 @@ public class ControllerOperadorMalha {
         reset();
         this.qtdVeiculosCriados = qtd;
         this.intervalo        = intervalo;
-        criarVeiculos();
+        criarVeiculo();
     }
     
     public void montaMalha(int[][] matriz){
