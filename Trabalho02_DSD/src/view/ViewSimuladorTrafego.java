@@ -4,6 +4,8 @@
  */
 package view;
 
+import controller.ControllerOperadorMalha;
+import controller.InterfaceObserver;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -13,16 +15,18 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
  * @author lucas
  */
-public class ViewSimuladorTrafego extends JFrame implements ActionListener{
+public class ViewSimuladorTrafego extends JFrame implements ActionListener, InterfaceObserver{
     
     private JLabel lblQtdVeiculos;
     private JLabel lblIntervaloInsercao;
@@ -42,8 +46,12 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener{
     private JPanel jpBottomDireita;
     
     private JTable jtMalha;
+    
+    private ControllerOperadorMalha controller;
 
     public ViewSimuladorTrafego(int[][] matriz) {
+        controller = ControllerOperadorMalha.getInstance();
+        controller.montaMalha(matriz);
         configuracoesBasicas();
         iniciaComponentes();
         configuraComponentes();
@@ -70,10 +78,23 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener{
         jtfQtdVeiculos       = new JTextField();
         jtfIntervaloInsercao = new JTextField();
         jbIniciar            = new JButton("Iniciar");
-        jbIniciar            = new JButton("Encerrar");
+        jbEncerrar           = new JButton("Encerrar");
+        jtMalha              = new JTable();
     }
     
     private void configuraComponentes(){
+        jpBottomDireita.add(lblQtdVeiculos);
+        jpBottomDireita.add(lblIntervaloInsercao);
+        
+        add(jpBottomDireita, BorderLayout.NORTH);
+        
+        jpBottomDireita.add(jtfQtdVeiculos);
+        jpBottomDireita.add(jtfIntervaloInsercao);
+        jpBottomDireita.add(jbIniciar);
+        jpBottomDireita.add(jbEncerrar);
+//        
+        add(jpBottomDireita, BorderLayout.NORTH);
+        
         
     }
 
@@ -82,4 +103,51 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+//    class EstradaTableModel extends AbstractTableModel {
+//
+//        private static final long serialVersionUID = 1L;
+//
+//        @Override
+//        public int getColumnCount() {
+//            return matriz[0].length;
+//        }
+//
+//        @Override
+//        public int getRowCount() {
+//            return matriz.length;
+//        }
+//
+//        @Override
+//        public Object getValueAt(int row, int col) {
+//            try {
+//                return gerenciador.getImageMatriz(col, row);
+//
+//            } catch (Exception e) {
+//                JOptionPane.showMessageDialog(null, e.toString());
+//                return null;
+//            }
+//        }
+//
+////    }
+//    
+
+    @Override
+    public void notifyAlterarItem() {
+        repaint();
+    }
+
+    @Override
+    public void notifyEncerrarSimulacao() {
+//        JOptionPane.showMessageDialog(panelOpcoes, "Simulacao Encerrada\n"
+//                                                + "Quantidade de carros solicitados: " + gerenciador.getQuantidadeDeCarros() + "\n"
+//                                                + "Quantidade de carros criados: " + gerenciador.getCarrosSpawnados());
+//        jbIniciar.setEnabled(true);       
+//        jrbMonitor.setEnabled(true);
+//        jrbSemaforo.setEnabled(true);
+//        jtfQtdCarros.setEnabled(true);
+//        jbEncerrar.setEnabled(false);
+//        jtfQtdCarros.setText("");
+//        jtfIntervaloInsercao.setEnabled(true);
+//        jtfIntervaloInsercao.setText("");
+    }
 }

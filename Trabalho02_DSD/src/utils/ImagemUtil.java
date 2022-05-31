@@ -31,6 +31,20 @@ public class ImagemUtil {
         return ARQUIVO_CAMINHO_PADRAO + nomeVeiculo + "_" + nomeObjeto + "_" + sentidoTratado + ARQUIVO_EXTENCAO;
     }
     
+    public static String getNomePadraoPosicaoMatriz(int posicao){
+        String nomeObjeto = "";
+        
+        if(posicao == 5 || posicao == 6 || posicao == 7 || posicao == 8 || posicao == 9 || posicao == 10 || posicao == 11 || posicao == 12){
+            nomeObjeto = "cruzamento";
+        }
+        else
+        if(posicao == 0){
+            nomeObjeto = "grama";
+        }
+        
+        return nomeObjeto;
+    }
+    
     private static String getSentencaSentidoObjeto(int sentidoObjeto){
         String resposta        = "";
         String respostaDirecao = "";

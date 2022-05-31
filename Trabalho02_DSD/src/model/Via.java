@@ -32,11 +32,19 @@ public class Via {
     private int linha;
     private int coluna;
     
-    private String    nome;
+    private String    caminhoImagem;
     private ImageIcon imagem;
     private Semaphore mutex;
     
     private Veiculo   veiculo;
+
+    public Via(int linha, int coluna, int sentido, String caminhoImagem) {
+        this.linha         = linha;
+        this.coluna        = coluna;
+        this.caminhoImagem = caminhoImagem;
+        this.imagem        = new ImageIcon(caminhoImagem);
+        this.veiculo       = null;
+    }
     
     public void adicionaVeiculo(Veiculo veiculo){
         try {
@@ -57,7 +65,7 @@ public class Via {
     public void retiraVeiculo(){
         try {
             mutex.acquire();
-            this.imagem  = new ImageIcon(ImagemUtil.getCaminhoImageIcon(nome));
+            this.imagem  = new ImageIcon(ImagemUtil.getCaminhoImageIcon(caminhoImagem));
             this.veiculo = null;
         } catch (InterruptedException ex) {
             Logger.getLogger(Via.class.getName()).log(Level.SEVERE, null, ex);

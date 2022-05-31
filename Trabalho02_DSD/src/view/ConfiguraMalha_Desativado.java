@@ -66,13 +66,13 @@ public class ConfiguraMalha_Desativado {
         String caminho = "";
         switch(opção){
             case 0:
-                caminho = "src/malha-exemplo-1.txt";
+                caminho = "media/malha-exemplo-1.txt";
                 break;
             case 1:
-                caminho = "src/malha-exemplo-2.txt";
+                caminho = "media/malha-exemplo-2.txt";
                 break;
             case 2:
-                caminho = "src/malha-exemplo-3.txt";
+                caminho = "media/malha-exemplo-3.txt";
                 break;
         }
         

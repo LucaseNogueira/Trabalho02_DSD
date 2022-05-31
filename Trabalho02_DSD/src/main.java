@@ -1,4 +1,5 @@
 
+import controller.ControllerServiceSimuladorTrafego;
 import java.io.IOException;
 import view.ConfiguraMalha_Desativado;
 
@@ -18,10 +19,9 @@ public class main {
         ConfiguraMalha_Desativado configMalha = new ConfiguraMalha_Desativado();
 //        int    tipoBuscaArquivo               = configMalha.escolheTipoBuscaArquivo();
         String caminhoArquivo                 = configMalha.escolheCaminhoArquivo(configMalha.escolheTipoBuscaArquivo());
-
-
-     
-
+        
+        ControllerServiceSimuladorTrafego controller = new ControllerServiceSimuladorTrafego(caminhoArquivo);
+        controller.iniciaSimulador();
 
 //        System.exit(0);
     }

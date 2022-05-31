@@ -32,6 +32,10 @@ public class Malha {
         return vias[linha][coluna];
     }
     
+    public void setVia(int linha, int coluna, Via via){
+        vias[linha][coluna] = via;
+    }
+    
     public int getLinhas(){
         return vias.length;
     }
@@ -39,5 +43,4 @@ public class Malha {
     public int getColunas(){
         return vias[0].length;
     }
-    
 }

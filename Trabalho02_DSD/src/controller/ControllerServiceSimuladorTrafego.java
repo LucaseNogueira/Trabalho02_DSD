@@ -26,7 +26,7 @@ public class ControllerServiceSimuladorTrafego {
             if(!arquivo.exists()){
                 throw new Exception("Arquivo não encontrado");
             }
-            
+            montaTela();
         }
         catch(Exception e){
             e.printStackTrace();
@@ -37,5 +37,7 @@ public class ControllerServiceSimuladorTrafego {
         Leitor leitorArquivo = new Leitor(arquivo);
         int[][] matriz       = leitorArquivo.getMatriz();
         view                 = new ViewSimuladorTrafego(matriz);
+        
+        view.setVisible(true);
     }
 }
