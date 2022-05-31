@@ -90,5 +90,15 @@ public class Via {
     public void setSentido(int sentido) {
         this.sentido = sentido;
     }
+
+    public ImageIcon getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(ImageIcon imagem) {
+        this.imagem = imagem;
+    }
+    
+    
     
 }

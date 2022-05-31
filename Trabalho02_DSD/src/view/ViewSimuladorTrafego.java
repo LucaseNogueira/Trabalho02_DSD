@@ -7,11 +7,15 @@ package view;
 import controller.ControllerOperadorMalha;
 import controller.InterfaceObserver;
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,8 +23,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -37,10 +43,6 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
     private JButton jbIniciar;
     private JButton jbEncerrar;
     
-    private GridBagLayout      layout;
-    private GridLayout         gridLayout;
-    private GridBagConstraints constraints;
-    
     private JPanel jpPrincipal;
     private JPanel jpBottomEsquerda;
     private JPanel jpBottomDireita;
@@ -52,6 +54,7 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
     public ViewSimuladorTrafego(int[][] matriz) {
         controller = ControllerOperadorMalha.getInstance();
         controller.montaMalha(matriz);
+        controller.addObservador(this);
         configuracoesBasicas();
         iniciaComponentes();
         configuraComponentes();
@@ -67,11 +70,8 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
     }
     
     private void iniciaComponentes(){
-        constraints          = new GridBagConstraints();
-        layout               = new GridBagLayout();
-        gridLayout           = new GridLayout(3, 3, 10, 10);
         jpPrincipal          = new JPanel();
-        jpBottomDireita      = new JPanel(gridLayout);
+        jpBottomDireita      = new JPanel(new GridLayout(3, 3, 10, 10));
         jpBottomEsquerda     = new JPanel();
         lblQtdVeiculos       = new JLabel("Quantidade de carros: ");
         lblIntervaloInsercao = new JLabel("Intervalo de Insercao (ms): ");
@@ -83,19 +83,35 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
     }
     
     private void configuraComponentes(){
-        jpBottomDireita.add(lblQtdVeiculos);
-        jpBottomDireita.add(lblIntervaloInsercao);
+        jpBottomEsquerda.add(lblQtdVeiculos);
+        jpBottomEsquerda.add(lblIntervaloInsercao);
         
-        add(jpBottomDireita, BorderLayout.NORTH);
+        add(jpBottomEsquerda, BorderLayout.NORTH);
         
         jpBottomDireita.add(jtfQtdVeiculos);
         jpBottomDireita.add(jtfIntervaloInsercao);
         jpBottomDireita.add(jbIniciar);
         jpBottomDireita.add(jbEncerrar);
-//        
+        
         add(jpBottomDireita, BorderLayout.NORTH);
         
+        jtMalha = new JTable();
+        jtMalha.setModel(new ViaTableModel());
+        for(int i = 0; i < jtMalha.getColumnModel().getColumnCount(); i++){
+            jtMalha.getColumnModel().getColumn(i).setWidth(22);
+            jtMalha.getColumnModel().getColumn(i).setMinWidth(22);
+            jtMalha.getColumnModel().getColumn(i).setMaxWidth(22);
+        }
+        jtMalha.setRowHeight(22);
+        jtMalha.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jtMalha.setShowGrid(false);
+        jtMalha.setIntercellSpacing(new Dimension(-1, 0));
+        jtMalha.setDefaultRenderer(Object.class, new ViaRenderer());
         
+        jpPrincipal.setLayout(new FlowLayout(FlowLayout.CENTER));
+        jpPrincipal.add(jtMalha);
+
+        add(jpPrincipal, BorderLayout.CENTER);
     }
 
     @Override
@@ -103,33 +119,46 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-//    class EstradaTableModel extends AbstractTableModel {
-//
-//        private static final long serialVersionUID = 1L;
-//
-//        @Override
-//        public int getColumnCount() {
-//            return matriz[0].length;
-//        }
-//
-//        @Override
-//        public int getRowCount() {
-//            return matriz.length;
-//        }
-//
-//        @Override
-//        public Object getValueAt(int row, int col) {
-//            try {
-//                return gerenciador.getImageMatriz(col, row);
-//
-//            } catch (Exception e) {
-//                JOptionPane.showMessageDialog(null, e.toString());
-//                return null;
-//            }
-//        }
-//
-////    }
-//    
+    class ViaTableModel extends AbstractTableModel {
+
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public int getColumnCount() {
+            return controller.getTotalColunas();
+        }
+
+        @Override
+        public int getRowCount() {
+            return controller.getTotalLinhas();
+        }
+
+        @Override
+        public Object getValueAt(int row, int col) {
+            try {
+                return controller.getIcone(row, col);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.toString());
+                return null;
+            }
+        }
+
+    }
+
+    class ViaRenderer extends DefaultTableCellRenderer {
+
+        private static final long serialVersionUID = 1L;
+
+        public Component getTableCellRendererComponent(JTable table,
+                Object value, boolean isSelected, boolean hasFocus, int row,
+                int column) {
+
+            setIcon((ImageIcon) value);
+
+            return this;
+        }
+    }
 
     @Override
     public void notifyAlterarItem() {

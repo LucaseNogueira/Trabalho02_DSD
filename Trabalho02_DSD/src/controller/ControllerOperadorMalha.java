@@ -6,6 +6,7 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
 import model.Malha;
 import model.Via;
 import utils.ImagemUtil;
@@ -65,6 +66,18 @@ public class ControllerOperadorMalha {
                 malha.setVia(i, j, new Via(i, j, valorMatriz, caminhoImagem));
             }
         }
+    }
+    
+    public int getTotalLinhas(){
+        return malha.getLinhas();
+    }
+    
+    public int getTotalColunas(){
+        return malha.getColunas();
+    }
+    
+    public ImageIcon getIcone(int linha, int coluna){
+        return malha.getVia(linha, coluna).getImagem();
     }
     
     public void addObservador(InterfaceObserver observador){

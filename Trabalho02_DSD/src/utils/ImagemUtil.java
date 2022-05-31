@@ -1,9 +1,5 @@
 package utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import model.Veiculo;
-
 /**
  *
  * @author Lucas Nogueira
@@ -61,7 +57,7 @@ public class ImagemUtil {
             if(sentidoObjeto == 4){
                 respostaDirecao = "_cima";
             }
-            resposta = "estrada_hotizontal" + respostaDirecao;
+            resposta = "estrada_horizontal" + respostaDirecao;
         }
         
         return resposta;
