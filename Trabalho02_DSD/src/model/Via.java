@@ -32,9 +32,6 @@ public class Via {
     private int linha;
     private int coluna;
     
-    private boolean cruzamento;
-    private boolean isRodovia;
-    
     private String    nome;
     private ImageIcon imagem;
     private Semaphore mutex;
@@ -69,4 +66,21 @@ public class Via {
             mutex.release();
         }
     }
+    
+    public boolean isRodovia(){
+        return sentido <= SENTIDO_ESQUERDA;
+    }
+    
+    public boolean isOcupado(){
+        return veiculo != null;
+    }
+
+    public int getSentido() {
+        return sentido;
+    }
+
+    public void setSentido(int sentido) {
+        this.sentido = sentido;
+    }
+    
 }

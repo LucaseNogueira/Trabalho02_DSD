@@ -12,30 +12,39 @@ import model.Via;
  */
 public class ControllerOperadorVeiculoMalha {
     
-//    public static final int SENTIDO_CIMA     = 1;
-//    public static final int SENTIDO_DIREITA  = 2;
-//    public static final int SENTIDO_BAIXO    = 3;
-//    public static final int SENTIDO_ESQUERDA = 4;
-//    public static final int SENTIDO_CRUZAMENTO = 20;
-    
-    private int sentido;
-    
-//    private Veiculo veiculo;
-//    private Via     via;
+    private Veiculo veiculo;
     private Malha   malha;
     
     public void andar(){
-        switch(sentido){
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            default:
-                parar();
+        int linha;
+        int coluna;
+        int proximoSentido;
+        
+        if(veiculo.isVisivel()){
+            switch(veiculo.getSentido()){
+                case Via.SENTIDO_CIMA:
+                    linha          = veiculo.getLinha() - 1;
+                    coluna         = veiculo.getColuna();
+                    gerenciarVias(linha, coluna);
+                    break;
+                case Via.SENTIDO_DIREITA:
+                    linha          = veiculo.getLinha();
+                    coluna         = veiculo.getColuna() + 1;
+                    gerenciarVias(linha, coluna);
+                    break;
+                case Via.SENTIDO_BAIXO:
+                    linha          = veiculo.getLinha() + 1;
+                    coluna         = veiculo.getColuna();
+                    gerenciarVias(linha, coluna);
+                    break;
+                case Via.SENTIDO_ESQUERDA:
+                    linha          = veiculo.getLinha();
+                    coluna         = veiculo.getColuna() - 1;
+                    gerenciarVias(linha, coluna);
+                    break;
+                default:
+                    parar();
+            }
         }
     }
     
@@ -47,8 +56,25 @@ public class ControllerOperadorVeiculoMalha {
         
     }
     
-    private void defineProximoSentido(int linha, int coluna){
-//        sentido = via.
+    private void gerenciarVias(int linha, int coluna){
+        Via viaAtual = malha.getVia(veiculo.getLinha(), veiculo.getColuna());
+        Via via      = malha.getVia(linha, coluna);
+        if(!via.isOcupado()){
+            andarProximaVia(viaAtual, via);
+        }
     }
     
+    private void andarProximaVia(Via viaAtual, Via via){
+        if(via.isRodovia()){
+            viaAtual.retiraVeiculo();
+            via.adicionaVeiculo(veiculo);
+        }
+        else{
+            andarCruzamento();
+        }
+    }
+    
+    private void andarCruzamento(){
+        
+    }
 }

@@ -28,7 +28,11 @@ public class Malha {
         this.vias = new Via[linha][coluna];
     }
     
-    public int getLinha(){
+    public Via getVia(int linha, int coluna){
+        return vias[linha][coluna];
+    }
+    
+    public int getLinhas(){
         return vias.length;
     }
     

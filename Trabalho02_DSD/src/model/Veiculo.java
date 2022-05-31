@@ -72,5 +72,15 @@ public class Veiculo extends Thread{
     public void setColuna(int coluna) {
         this.coluna = coluna;
     }
+
+    public boolean isVisivel() {
+        return visivel;
+    }
+
+    public void setVisivel(boolean visivel) {
+        this.visivel = visivel;
+    }
+    
+    
     
 }
