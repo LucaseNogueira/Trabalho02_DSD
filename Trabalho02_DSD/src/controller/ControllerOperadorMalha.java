@@ -54,7 +54,7 @@ public class ControllerOperadorMalha {
     }
     
     public void criarVeiculo(){
-        if(){
+        if((qtdVeiculosRodando < qtdVeiculosCriados) && status == STATUS_EXECUCAO_INICIADA){
             
         }
     }
