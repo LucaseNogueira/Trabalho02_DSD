@@ -1,6 +1,7 @@
 package model;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -34,7 +35,8 @@ public class Via {
     
     private String    caminhoImagem;
     private ImageIcon imagem;
-    private Semaphore mutex;
+    private Semaphore movimentacao;
+    private Semaphore trajeto;
     
     private Veiculo   veiculo;
 
@@ -48,7 +50,7 @@ public class Via {
     
     public void adicionaVeiculo(Veiculo veiculo){
         try {
-            mutex.acquire();
+            movimentacao.acquire();
             veiculo.setLinha(linha);
             veiculo.setColuna(coluna);
             veiculo.setSentido(sentido);
@@ -58,20 +60,21 @@ public class Via {
             Logger.getLogger(Via.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally{
-            mutex.release();
+            movimentacao.release();
         }
     }
     
     public void retiraVeiculo(){
         try {
-            mutex.acquire();
+            movimentacao.acquire();
             this.imagem  = new ImageIcon(ImagemUtil.getCaminhoImageIcon(caminhoImagem));
             this.veiculo = null;
         } catch (InterruptedException ex) {
             Logger.getLogger(Via.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally{
-            mutex.release();
+            movimentacao.release();
+            trajeto.release();
         }
     }
     
@@ -98,7 +101,32 @@ public class Via {
     public void setImagem(ImageIcon imagem) {
         this.imagem = imagem;
     }
+
+    public int getLinha() {
+        return linha;
+    }
+
+    public void setLinha(int linha) {
+        this.linha = linha;
+    }
+
+    public int getColuna() {
+        return coluna;
+    }
+
+    public void setColuna(int coluna) {
+        this.coluna = coluna;
+    }
     
-    
+    public boolean trajetoLivre(){
+        boolean livre = false;
+        try {
+            livre = trajeto.tryAcquire(500, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Via.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return livre;
+    }
     
 }
