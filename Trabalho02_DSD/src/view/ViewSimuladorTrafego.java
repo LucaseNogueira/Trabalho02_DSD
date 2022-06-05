@@ -140,6 +140,7 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
     
     private void actionPerformedEncerrar(){
         jbEncerrar.setEnabled(false);
+        controller.encerraSimulacao();
     }
     
     private boolean validaJTextField(JTextField jtf){

@@ -69,6 +69,10 @@ public class ControllerOperadorMalha {
         criarVeiculo();
     }
     
+    public void encerraSimulacao(){
+        status = STATUS_EXECUCAO_FINALIZADA;
+    }
+    
     public void montaMalha(int[][] matriz){
         int linhas  = matriz.length;
         int colunas = matriz[0].length;

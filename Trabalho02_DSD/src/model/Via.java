@@ -44,8 +44,11 @@ public class Via {
         this.linha         = linha;
         this.coluna        = coluna;
         this.caminhoImagem = caminhoImagem;
+        this.sentido       = sentido;
         this.imagem        = new ImageIcon(caminhoImagem);
         this.veiculo       = null;
+        this.movimentacao  = new Semaphore(1);
+        this.trajeto       = new Semaphore(1);
     }
     
     public void adicionaVeiculo(Veiculo veiculo){

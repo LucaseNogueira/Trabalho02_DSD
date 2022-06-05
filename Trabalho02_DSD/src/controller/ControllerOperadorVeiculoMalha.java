@@ -72,7 +72,6 @@ public class ControllerOperadorVeiculoMalha {
     private boolean spawnarVeiculo(){
         boolean sucesso = true;
         
-        while(!sucesso){
             try {
                 Random random               = new Random();
                 int linha                   = 0;
@@ -82,48 +81,48 @@ public class ControllerOperadorVeiculoMalha {
                 this.veiculo.setSentido(random.nextInt(4) + 1);
                 switch(veiculo.getSentido()){
                     case Via.SENTIDO_CIMA:
-                        linha  = malha.getLinhas();
-                        coluna = malha.getColunas();
+                        linha  = malha.getLinhas() - 1;
+                        coluna = malha.getColunas() - 1;
                         for(int i = 0; i < coluna; i++){
                             if(malha.getVia(linha, i).getSentido() == Via.SENTIDO_CIMA){
                                 pontosPartida.add(i);
                             }
                         }
-                        linhaColunaInicial = random.nextInt(pontosPartida.size());
+                        linhaColunaInicial = pontosPartida.get(random.nextInt(pontosPartida.size()));
                         malha.getVia(linha, linhaColunaInicial).adicionaVeiculo(veiculo);
                         sucesso = true;
                         break;
                     case Via.SENTIDO_DIREITA:
-                        linha  = malha.getLinhas();
+                        linha  = malha.getLinhas() - 1;
                         for(int i = 0; i < linha; i++){
                             if(malha.getVia(i, coluna).getSentido() == Via.SENTIDO_DIREITA){
                                 pontosPartida.add(i);
                             }
                         }
-                        linhaColunaInicial = random.nextInt(pontosPartida.size());
+                        linhaColunaInicial = pontosPartida.get(random.nextInt(pontosPartida.size()));
                         malha.getVia(linhaColunaInicial, coluna).adicionaVeiculo(veiculo);
                         sucesso = true;
                         break;
                     case Via.SENTIDO_BAIXO:
-                        coluna = malha.getColunas();
+                        coluna = malha.getColunas() - 1;
                         for(int i = 0; i < coluna; i++){
                             if(malha.getVia(linha, i).getSentido() == Via.SENTIDO_BAIXO){
                                 pontosPartida.add(i);
                             }
                         }
-                        linhaColunaInicial = random.nextInt(pontosPartida.size());
+                        linhaColunaInicial = pontosPartida.get(random.nextInt(pontosPartida.size()));
                         malha.getVia(linha, linhaColunaInicial).adicionaVeiculo(veiculo);
                         sucesso = true;
                         break;
                     case Via.SENTIDO_ESQUERDA:
-                        linha  = malha.getLinhas();
-                        coluna = malha.getColunas();
+                        linha  = malha.getLinhas() - 1;
+                        coluna = malha.getColunas() - 1;
                         for(int i = 0; i < linha; i++){
                             if(malha.getVia(i, coluna).getSentido() == Via.SENTIDO_ESQUERDA){
                                 pontosPartida.add(i);
                             }
                         }
-                        linhaColunaInicial = random.nextInt(pontosPartida.size());
+                        linhaColunaInicial = pontosPartida.get(random.nextInt(pontosPartida.size()));
                         malha.getVia(linhaColunaInicial, coluna).adicionaVeiculo(veiculo);
                         sucesso = true;
                         break;
@@ -132,7 +131,6 @@ public class ControllerOperadorVeiculoMalha {
             } catch (InterruptedException ex) {
                 Logger.getLogger(ControllerOperadorVeiculoMalha.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
         return sucesso;
     }
     
