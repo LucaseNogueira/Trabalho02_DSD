@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package view;
 
 import controller.ControllerOperadorMalha;
@@ -10,8 +6,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -80,6 +74,7 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
         jbIniciar            = new JButton("Iniciar");
         jbEncerrar           = new JButton("Encerrar");
         jtMalha              = new JTable();
+     
     }
     
     private void configuraComponentes(){
@@ -94,7 +89,9 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
         
         add(jpBottomDireita, BorderLayout.NORTH);
         
-        jtMalha = new JTable();
+         
+        
+        jtMalha = new JTable();        
         jtMalha.setModel(new ViaTableModel());
         for(int i = 0; i < jtMalha.getColumnModel().getColumnCount(); i++){
             jtMalha.getColumnModel().getColumn(i).setWidth(22);
@@ -112,7 +109,7 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
 
         add(jpPrincipal, BorderLayout.CENTER);
         
-        jbIniciar.addActionListener(this);
+        jbIniciar.addActionListener((e) -> actionPerformedIniciar());
         
         jbEncerrar.setEnabled(false);
         jbEncerrar.addActionListener(this);
@@ -153,6 +150,7 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
         
         return sucesso;
     }
+
 
 //    private boolean validaTextField(JTextField jtfIntervaloInsercao) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
