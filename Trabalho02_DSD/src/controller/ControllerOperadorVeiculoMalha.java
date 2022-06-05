@@ -160,6 +160,28 @@ public class ControllerOperadorVeiculoMalha {
         
         caminhosAlternativos.add(listaViaDefault);
         defineAlternativaCruzamento(caminhosAlternativos, via, 0);
+        
+        Random random              = new Random();
+        int totalAlternativas      = caminhosAlternativos.size();
+        List<Via> caminho          = caminhosAlternativos.get(random.nextInt(totalAlternativas));
+        if(caminho.size() == getCaminhosReservados(caminho).size()){
+            for(Via viaAndar : caminho){
+                viaAtual.retiraVeiculo();
+                viaAndar.adicionaVeiculo(veiculo);
+                viaAtual = viaAndar;
+            }
+        }
+    }
+    
+    private List<Via> getCaminhosReservados(List<Via> caminho){
+        List<Via> caminhoReservado = new ArrayList();
+        for(Via via : caminho){
+            if(via.trajetoLivre()){
+                caminhoReservado.add(via);
+            }
+        }
+        
+        return caminhoReservado;
     }
     
     private void defineAlternativaCruzamento(List<List<Via>> caminhosAlternativos, Via viaAlternativa, int alternativa){

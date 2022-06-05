@@ -31,6 +31,7 @@ public class Veiculo extends Thread{
         this.coluna  = 0;
         this.visivel = true;
         this.rodando = false;
+        this.aceleracao = new Random();
         operador = new ControllerOperadorVeiculoMalha(this);
     }
     
