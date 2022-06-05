@@ -1,7 +1,7 @@
 
 import controller.ControllerServiceSimuladorTrafego;
 import java.io.IOException;
-import view.ConfiguraMalha_Desativado;
+import view.ConfiguraMalha;
 
 
 /**
@@ -16,10 +16,11 @@ public class main {
        
     public static void main(String[] args) throws IOException{
         
-        ConfiguraMalha_Desativado configMalha = new ConfiguraMalha_Desativado();
-//        int    tipoBuscaArquivo               = configMalha.escolheTipoBuscaArquivo();
-        String caminhoArquivo                 = configMalha.escolheCaminhoArquivo(configMalha.escolheTipoBuscaArquivo());
-        
+        ConfiguraMalha configMalha = new ConfiguraMalha();
+//        String caminhoArquivo                 = configMalha.escolheCaminhoArquivo(configMalha.escolheTipoBuscaArquivo());
+
+        String caminhoArquivo = configMalha.informaCaminhoPadrao();
+
         ControllerServiceSimuladorTrafego controller = new ControllerServiceSimuladorTrafego(caminhoArquivo);
         controller.iniciaSimulador();
 
