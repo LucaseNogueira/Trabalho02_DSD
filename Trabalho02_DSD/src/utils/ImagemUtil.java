@@ -29,7 +29,6 @@ public class ImagemUtil {
 
     public static String getNomePadraoPosicaoMatriz(int posicao) {
         String nomeObjeto = "";
-        System.out.println( "POSIÇÃO: " + posicao);
 
         switch (posicao) {
             case 0:
@@ -59,18 +58,7 @@ public class ImagemUtil {
             case 12:
                 nomeObjeto = "cruzamento";
                 break;
-            default:
-                System.out.println("Classe: ImagemUtil no método getNomePadraoPosicaoMatriz() => POSIÇÃO: " + posicao);
-                break;
         }
-
-//        if(posicao == 5 || posicao == 6 || posicao == 7 || posicao == 8 || posicao == 9 || posicao == 10 || posicao == 11 || posicao == 12){
-//            nomeObjeto = "cruzamento";
-//        }
-//        else
-//        if(posicao == 0){
-//            nomeObjeto = "grama";
-//        }
         return nomeObjeto;
     }
 

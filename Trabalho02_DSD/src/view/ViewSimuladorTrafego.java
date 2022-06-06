@@ -91,7 +91,7 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
         
          
         
-        jtMalha = new JTable();        
+        jtMalha = new JTable();
         jtMalha.setModel(new ViaTableModel());
         for(int i = 0; i < jtMalha.getColumnModel().getColumnCount(); i++){
             jtMalha.getColumnModel().getColumn(i).setWidth(22);

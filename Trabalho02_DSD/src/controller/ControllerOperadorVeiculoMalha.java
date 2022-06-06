@@ -31,7 +31,7 @@ public class ControllerOperadorVeiculoMalha {
         int coluna;
         
         if(veiculo.isVisivel()){
-            switch(veiculo.getSentido()){
+            switch(veiculo.getSentido()){                
                 case Via.SENTIDO_CIMA:
                     linha          = veiculo.getLinha() - 1;
                     coluna         = veiculo.getColuna();
