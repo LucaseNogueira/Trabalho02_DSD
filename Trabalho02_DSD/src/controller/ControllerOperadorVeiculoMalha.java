@@ -20,10 +20,12 @@ public class ControllerOperadorVeiculoMalha {
     
     private Veiculo veiculo;
     private Malha   malha;
+    private ControllerOperadorMalha controller;
 
     public ControllerOperadorVeiculoMalha(Veiculo veiculo) {
-        this.veiculo = veiculo;
-        this.malha   = Malha.getInstance();
+        this.veiculo    = veiculo;
+        this.malha      = Malha.getInstance();
+        this.controller = ControllerOperadorMalha.getInstance();
     }
     
     public void andar(){
@@ -31,7 +33,7 @@ public class ControllerOperadorVeiculoMalha {
         int coluna;
         
         if(veiculo.isVisivel()){
-            switch(veiculo.getSentido()){                
+            switch(veiculo.getSentido()){
                 case Via.SENTIDO_CIMA:
                     linha          = veiculo.getLinha() - 1;
                     coluna         = veiculo.getColuna();
@@ -55,6 +57,7 @@ public class ControllerOperadorVeiculoMalha {
 //                default:
 //                    parar(); //É BEM POSSÍVEL QUE QUANDO O MÉTODO PARAR NUNCA SERÁ CHAMADO POR AQUI
             }
+            controller.notificarViaAlterada();
         }
     }
     
@@ -70,7 +73,7 @@ public class ControllerOperadorVeiculoMalha {
         veiculo.setVisivel(false);
         veiculo.setRodando(false);
         
-        ControllerOperadorMalha controller = ControllerOperadorMalha.getInstance();
+        controller = ControllerOperadorMalha.getInstance();
         controller.isEncerraSimulacao();
     }
     
@@ -95,6 +98,7 @@ public class ControllerOperadorVeiculoMalha {
                         }
                         linhaColunaInicial = pontosPartida.get(random.nextInt(pontosPartida.size()));
                         malha.getVia(linha, linhaColunaInicial).adicionaVeiculo(veiculo);
+                        veiculo.setRodando(true);
                         sucesso = true;
                         break;
                     case Via.SENTIDO_DIREITA:
@@ -106,6 +110,7 @@ public class ControllerOperadorVeiculoMalha {
                         }
                         linhaColunaInicial = pontosPartida.get(random.nextInt(pontosPartida.size()));
                         malha.getVia(linhaColunaInicial, coluna).adicionaVeiculo(veiculo);
+                        veiculo.setRodando(true);
                         sucesso = true;
                         break;
                     case Via.SENTIDO_BAIXO:
@@ -117,6 +122,7 @@ public class ControllerOperadorVeiculoMalha {
                         }
                         linhaColunaInicial = pontosPartida.get(random.nextInt(pontosPartida.size()));
                         malha.getVia(linha, linhaColunaInicial).adicionaVeiculo(veiculo);
+                        veiculo.setRodando(true);
                         sucesso = true;
                         break;
                     case Via.SENTIDO_ESQUERDA:
@@ -129,6 +135,7 @@ public class ControllerOperadorVeiculoMalha {
                         }
                         linhaColunaInicial = pontosPartida.get(random.nextInt(pontosPartida.size()));
                         malha.getVia(linhaColunaInicial, coluna).adicionaVeiculo(veiculo);
+                        veiculo.setRodando(true);
                         sucesso = true;
                         break;
                 }

@@ -62,6 +62,7 @@ public class ControllerOperadorMalha {
         reset();
         this.qtdVeiculosCriados = qtd;
         this.intervalo          = intervalo;
+        notificarViaAlterada();
         criarVeiculo();
     }
     
