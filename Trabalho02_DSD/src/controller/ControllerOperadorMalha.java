@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controller;
 
 import java.util.ArrayList;
@@ -35,10 +31,10 @@ public class ControllerOperadorMalha {
     private static ControllerOperadorMalha instance;
 
     private ControllerOperadorMalha() {
-        malha            = Malha.getInstance();
-        status           = STATUS_EXECUCAO_PARADA;
+        malha              = Malha.getInstance();
+        status             = STATUS_EXECUCAO_PARADA;
         qtdVeiculosRodando = 0;
-        observadores     = new ArrayList<>();
+        observadores       = new ArrayList<>();
     }
     
     public synchronized static ControllerOperadorMalha getInstance(){
@@ -51,7 +47,7 @@ public class ControllerOperadorMalha {
     public void reset(){
         qtdVeiculosRodando    = 0;
         qtdVeiculosDestruidos = 0;
-        status              = STATUS_EXECUCAO_INICIADA;
+        status                = STATUS_EXECUCAO_INICIADA;
     }
     
     public void criarVeiculo(){
@@ -65,7 +61,7 @@ public class ControllerOperadorMalha {
     public void iniciaSimulacao(int qtd, int intervalo){
         reset();
         this.qtdVeiculosCriados = qtd;
-        this.intervalo        = intervalo;
+        this.intervalo          = intervalo;
         criarVeiculo();
     }
     
