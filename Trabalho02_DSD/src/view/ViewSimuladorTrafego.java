@@ -205,5 +205,12 @@ public class ViewSimuladorTrafego extends JFrame implements ActionListener, Inte
 
     @Override
     public void notifyEncerrarSimulacao() {
+        JOptionPane.showMessageDialog(jpBottomDireita, "Simulacao Encerrada\n"
+                                                + "Quantidade de carros solicitado: " + controller.getQtdVeiculosCriados() + "\n"
+                                                + "Quantidade de carros criado: " + controller.getQtdVeiculosRodando());
+        jbIniciar.setEnabled(true);
+        jbEncerrar.setEnabled(false);
+        jtfQtdVeiculos.setText("");
+        jtfIntervaloInsercao.setText("");
     }
 }

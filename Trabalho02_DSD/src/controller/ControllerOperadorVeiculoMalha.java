@@ -52,8 +52,8 @@ public class ControllerOperadorVeiculoMalha {
                     coluna         = veiculo.getColuna() - 1;
                     gerenciarVias(linha, coluna);
                     break;
-                default:
-                    parar();
+//                default:
+//                    parar(); //É BEM POSSÍVEL QUE QUANDO O MÉTODO PARAR NUNCA SERÁ CHAMADO POR AQUI
             }
         }
     }
@@ -66,7 +66,12 @@ public class ControllerOperadorVeiculoMalha {
     }
     
     private void parar(){
+        malha.getVia(veiculo.getLinha(), veiculo.getColuna()).retiraVeiculo();
+        veiculo.setVisivel(false);
+        veiculo.setRodando(false);
         
+        ControllerOperadorMalha controller = ControllerOperadorMalha.getInstance();
+        controller.isEncerraSimulacao();
     }
     
     private boolean spawnarVeiculo(){
@@ -135,10 +140,15 @@ public class ControllerOperadorVeiculoMalha {
     }
     
     private void gerenciarVias(int linha, int coluna){
-        Via viaAtual = malha.getVia(veiculo.getLinha(), veiculo.getColuna());
-        Via via      = malha.getVia(linha, coluna);
-        if(!via.isOcupado()){
-            andarProximaVia(viaAtual, via);
+        if(linha == malha.getLinhas() || coluna == malha.getColunas()){
+            Via viaAtual = malha.getVia(veiculo.getLinha(), veiculo.getColuna());
+            Via via      = malha.getVia(linha, coluna);
+            if(!via.isOcupado()){
+                andarProximaVia(viaAtual, via);
+            }
+        }
+        else {
+            parar();
         }
     }
     

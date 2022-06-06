@@ -73,6 +73,15 @@ public class ControllerOperadorMalha {
         status = STATUS_EXECUCAO_FINALIZADA;
     }
     
+    public void isEncerraSimulacao(){
+        qtdVeiculosDestruidos++;
+        if(qtdVeiculosDestruidos == qtdVeiculosCriados){
+            for(InterfaceObserver obs : observadores){
+                obs.notifyEncerrarSimulacao();
+            }
+        }
+    }
+    
     public void montaMalha(int[][] matriz){
         int linhas  = matriz.length;
         int colunas = matriz[0].length;
@@ -102,6 +111,32 @@ public class ControllerOperadorMalha {
     public int getTotalColunas(){
         return malha.getColunas();
     }
+
+    public int getQtdVeiculosRodando() {
+        return qtdVeiculosRodando;
+    }
+
+    public void setQtdVeiculosRodando(int qtdVeiculosRodando) {
+        this.qtdVeiculosRodando = qtdVeiculosRodando;
+    }
+
+    public int getQtdVeiculosCriados() {
+        return qtdVeiculosCriados;
+    }
+
+    public void setQtdVeiculosCriados(int qtdVeiculosCriados) {
+        this.qtdVeiculosCriados = qtdVeiculosCriados;
+    }
+
+    public int getQtdVeiculosDestruidos() {
+        return qtdVeiculosDestruidos;
+    }
+
+    public void setQtdVeiculosDestruidos(int qtdVeiculosDestruidos) {
+        this.qtdVeiculosDestruidos = qtdVeiculosDestruidos;
+    }
+    
+    
     
     public ImageIcon getIcone(int linha, int coluna){
         return malha.getVia(linha, coluna).getImagem();

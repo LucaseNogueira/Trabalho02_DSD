@@ -99,6 +99,14 @@ public class Veiculo extends Thread{
     public void setIntervaloCriacao(int intervaloCriacao) {
         this.intervaloCriacao = intervaloCriacao;
     }
+
+    public boolean isRodando() {
+        return rodando;
+    }
+
+    public void setRodando(boolean rodando) {
+        this.rodando = rodando;
+    }
     
     private void defineNome(){
         Random random = new Random();
