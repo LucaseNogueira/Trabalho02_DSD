@@ -29,12 +29,15 @@ public class ControllerOperadorMalha {
     private Malha malha;
 
     private static ControllerOperadorMalha instance;
+    
+    private List<List<Via>> pontosPartida;
 
     private ControllerOperadorMalha() {
         malha              = Malha.getInstance();
         status             = STATUS_EXECUCAO_PARADA;
         qtdVeiculosRodando = 0;
         observadores       = new ArrayList<>();
+        pontosPartida      = new ArrayList<>();
     }
     
     public synchronized static ControllerOperadorMalha getInstance(){
@@ -99,6 +102,45 @@ public class ControllerOperadorMalha {
                 malha.setVia(i, j, new Via(i, j, valorMatriz, caminhoImagem));
             }
         }
+        criarPontosPartida();
+    }
+    
+    private void criarPontosPartida(){
+        for(int i = 0; i < 4; i++){
+            pontosPartida.add(new ArrayList<Via>());
+        }
+        
+        int linha  = malha.getLinhas() - 1;
+        int coluna = malha.getColunas() - 1;
+        for(int i = 0; i < coluna; i++){
+            if(malha.getVia(linha, i).getSentido() == Via.SENTIDO_CIMA){
+                pontosPartida.get(Via.SENTIDO_CIMA - 1).add(malha.getVia(linha, i));
+            }
+        }
+        
+        linha  = malha.getLinhas() - 1;
+        coluna = 0;
+        for(int i = 0; i < linha; i++){
+            if(malha.getVia(i, coluna).getSentido() == Via.SENTIDO_DIREITA){
+                pontosPartida.get(Via.SENTIDO_DIREITA - 1).add(malha.getVia(i, coluna));
+            }
+        }
+        
+        linha  = 0;
+        coluna = malha.getColunas() - 1;
+        for(int i = 0; i < coluna; i++){
+            if(malha.getVia(linha, i).getSentido() == Via.SENTIDO_BAIXO){
+                pontosPartida.get(Via.SENTIDO_BAIXO - 1).add(malha.getVia(linha, i));
+            }
+        }
+        
+        linha  = malha.getLinhas() - 1;
+        coluna = malha.getColunas() - 1;
+        for(int i = 0; i < linha; i++){
+            if(malha.getVia(i, coluna).getSentido() == Via.SENTIDO_ESQUERDA){
+                pontosPartida.get(Via.SENTIDO_ESQUERDA - 1).add(malha.getVia(i, coluna));
+            }
+        }
     }
     
     public int getTotalLinhas(){
@@ -132,8 +174,14 @@ public class ControllerOperadorMalha {
     public void setQtdVeiculosDestruidos(int qtdVeiculosDestruidos) {
         this.qtdVeiculosDestruidos = qtdVeiculosDestruidos;
     }
-    
-    
+
+    public List<List<Via>> getPontosPartida() {
+        return pontosPartida;
+    }
+
+    public void setPontosPartida(List<List<Via>> pontosPartida) {
+        this.pontosPartida = pontosPartida;
+    }
     
     public ImageIcon getIcone(int linha, int coluna){
         return malha.getVia(linha, coluna).getImagem();

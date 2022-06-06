@@ -77,6 +77,19 @@ public class ControllerOperadorVeiculoMalha {
         controller.isEncerraSimulacao();
     }
     
+    private boolean isUltimaVia(int linha, int coluna){
+        boolean isUltima = false;
+        
+        try{
+            malha.getVia(linha, coluna);
+        }
+        catch(Exception e){
+            isUltima = true;
+        }
+        
+        return isUltima;
+    }
+    
     private boolean spawnarVeiculo(){
         boolean sucesso = true;
         
@@ -85,61 +98,42 @@ public class ControllerOperadorVeiculoMalha {
                 int linha                   = 0;
                 int coluna                  = 0;
                 List<Integer> pontosPartida = new ArrayList<>();
+                List<Via> pontoPartida;
+                Via viaInicial;
                 int linhaColunaInicial;
                 this.veiculo.setSentido(random.nextInt(4) + 1);
                 switch(veiculo.getSentido()){
                     case Via.SENTIDO_CIMA:
-                        linha  = malha.getLinhas() - 1;
-                        coluna = malha.getColunas() - 1;
-                        for(int i = 0; i < coluna; i++){
-                            if(malha.getVia(linha, i).getSentido() == Via.SENTIDO_CIMA){
-                                pontosPartida.add(i);
-                            }
-                        }
-                        linhaColunaInicial = pontosPartida.get(random.nextInt(pontosPartida.size()));
-                        malha.getVia(linha, linhaColunaInicial).adicionaVeiculo(veiculo);
+                        pontoPartida = controller.getPontosPartida().get(Via.SENTIDO_CIMA - 1);
+                        viaInicial = pontoPartida.get(random.nextInt(pontoPartida.size()));
+                        viaInicial.adicionaVeiculo(veiculo);
                         veiculo.setRodando(true);
                         sucesso = true;
                         break;
                     case Via.SENTIDO_DIREITA:
-                        linha  = malha.getLinhas() - 1;
-                        for(int i = 0; i < linha; i++){
-                            if(malha.getVia(i, coluna).getSentido() == Via.SENTIDO_DIREITA){
-                                pontosPartida.add(i);
-                            }
-                        }
-                        linhaColunaInicial = pontosPartida.get(random.nextInt(pontosPartida.size()));
-                        malha.getVia(linhaColunaInicial, coluna).adicionaVeiculo(veiculo);
+                        pontoPartida = controller.getPontosPartida().get(Via.SENTIDO_DIREITA - 1);
+                        viaInicial = pontoPartida.get(random.nextInt(pontoPartida.size()));
+                        viaInicial.adicionaVeiculo(veiculo);
                         veiculo.setRodando(true);
                         sucesso = true;
                         break;
                     case Via.SENTIDO_BAIXO:
-                        coluna = malha.getColunas() - 1;
-                        for(int i = 0; i < coluna; i++){
-                            if(malha.getVia(linha, i).getSentido() == Via.SENTIDO_BAIXO){
-                                pontosPartida.add(i);
-                            }
-                        }
-                        linhaColunaInicial = pontosPartida.get(random.nextInt(pontosPartida.size()));
-                        malha.getVia(linha, linhaColunaInicial).adicionaVeiculo(veiculo);
+                        pontoPartida = controller.getPontosPartida().get(Via.SENTIDO_BAIXO - 1);
+                        viaInicial = pontoPartida.get(random.nextInt(pontoPartida.size()));
+                        viaInicial.adicionaVeiculo(veiculo);
                         veiculo.setRodando(true);
                         sucesso = true;
                         break;
                     case Via.SENTIDO_ESQUERDA:
-                        linha  = malha.getLinhas() - 1;
-                        coluna = malha.getColunas() - 1;
-                        for(int i = 0; i < linha; i++){
-                            if(malha.getVia(i, coluna).getSentido() == Via.SENTIDO_ESQUERDA){
-                                pontosPartida.add(i);
-                            }
-                        }
-                        linhaColunaInicial = pontosPartida.get(random.nextInt(pontosPartida.size()));
-                        malha.getVia(linhaColunaInicial, coluna).adicionaVeiculo(veiculo);
+                        pontoPartida = controller.getPontosPartida().get(Via.SENTIDO_ESQUERDA - 1);
+                        viaInicial = pontoPartida.get(random.nextInt(pontoPartida.size()));
+                        viaInicial.adicionaVeiculo(veiculo);
                         veiculo.setRodando(true);
                         sucesso = true;
                         break;
                 }
                 sleep((long) this.veiculo.getIntervaloCriacao());
+                controller.notificarViaAlterada();
             } catch (InterruptedException ex) {
                 Logger.getLogger(ControllerOperadorVeiculoMalha.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -147,7 +141,7 @@ public class ControllerOperadorVeiculoMalha {
     }
     
     private void gerenciarVias(int linha, int coluna){
-        if(linha == malha.getLinhas() || coluna == malha.getColunas()){
+        if(!isUltimaVia(linha, coluna)){
             Via viaAtual = malha.getVia(veiculo.getLinha(), veiculo.getColuna());
             Via via      = malha.getVia(linha, coluna);
             if(!via.isOcupado()){
@@ -185,6 +179,7 @@ public class ControllerOperadorVeiculoMalha {
                 viaAndar.adicionaVeiculo(veiculo);
                 viaAtual = viaAndar;
             }
+            controller.notificarViaAlterada();
         }
     }
     
