@@ -58,8 +58,6 @@ public class ControllerOperadorVeiculoMalha {
                     coluna         = veiculo.getColuna() - 1;
                     gerenciarVias(linha, coluna);
                     break;
-//                default:
-//                    parar(); //É BEM POSSÍVEL QUE QUANDO O MÉTODO PARAR NUNCA SERÁ CHAMADO POR AQUI
             }
             controller.notificarViaAlterada();
         }
@@ -183,6 +181,9 @@ public class ControllerOperadorVeiculoMalha {
             if(via.trajetoLivre()){
                 caminhoReservado.add(via);
             }
+            else{
+                via.liberarTrajeto();
+            }
         }
         
         return caminhoReservado;
@@ -284,13 +285,6 @@ public class ControllerOperadorVeiculoMalha {
                         break;
                 }
                 break;      
-        }
-    }
-    
-    private void iniciaCaminhosAlternativos(List<List<Via>> caminhosAlternativos, Via viaAlternativa, int qtdCaminhos){
-        for(int i = 0; i < qtdCaminhos; i++){
-            caminhosAlternativos.add(new ArrayList<Via>());
-            caminhosAlternativos.get(i).add(viaAlternativa);
         }
     }
     

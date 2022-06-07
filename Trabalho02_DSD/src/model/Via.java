@@ -124,7 +124,7 @@ public class Via {
     public boolean trajetoLivre(){
         boolean livre = false;
         try {
-            livre = trajeto.tryAcquire(500, TimeUnit.MILLISECONDS);
+            livre = trajeto.tryAcquire(200, TimeUnit.MILLISECONDS);
         } catch (InterruptedException ex) {
             Logger.getLogger(Via.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -132,4 +132,7 @@ public class Via {
         return livre;
     }
     
+    public void liberarTrajeto(){
+        trajeto.release();
+    }
 }
