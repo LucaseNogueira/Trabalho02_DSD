@@ -18,6 +18,11 @@ public class ControllerOperadorMalha {
     public static final int STATUS_EXECUCAO_FINALIZADA = 2;
     public static final int STATUS_EXECUCAO_PARADA     = 3;
     
+    public static final int PONTO_PARTIDA_CIMA     = 0;
+    public static final int PONTO_PARTIDA_DIREITA  = 1;
+    public static final int PONTO_PARTIDA_BAIXO    = 2;
+    public static final int PONTO_PARTIDA_ESQUERDA = 3;
+    
     private int status;
     private int qtdVeiculosRodando;
     private int qtdVeiculosCriados;

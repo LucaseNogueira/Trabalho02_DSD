@@ -18,6 +18,10 @@ import model.Via;
  */
 public class ControllerOperadorVeiculoMalha {
     
+    public static final int CRUZAMENTO_LEVE     = 1;
+    public static final int CRUZAMENTO_MODERADO = 2;
+    public static final int CRUZAMENTO_PESADO   = 3;
+    
     private Veiculo veiculo;
     private Malha   malha;
     private ControllerOperadorMalha controller;
@@ -94,38 +98,34 @@ public class ControllerOperadorVeiculoMalha {
         boolean sucesso = true;
         
             try {
-                Random random               = new Random();
-                int linha                   = 0;
-                int coluna                  = 0;
-                List<Integer> pontosPartida = new ArrayList<>();
+                Random random = new Random();
                 List<Via> pontoPartida;
                 Via viaInicial;
-                int linhaColunaInicial;
                 this.veiculo.setSentido(random.nextInt(4) + 1);
                 switch(veiculo.getSentido()){
                     case Via.SENTIDO_CIMA:
-                        pontoPartida = controller.getPontosPartida().get(Via.SENTIDO_CIMA - 1);
+                        pontoPartida = controller.getPontosPartida().get(ControllerOperadorMalha.PONTO_PARTIDA_CIMA);
                         viaInicial = pontoPartida.get(random.nextInt(pontoPartida.size()));
                         viaInicial.adicionaVeiculo(veiculo);
                         veiculo.setRodando(true);
                         sucesso = true;
                         break;
                     case Via.SENTIDO_DIREITA:
-                        pontoPartida = controller.getPontosPartida().get(Via.SENTIDO_DIREITA - 1);
+                        pontoPartida = controller.getPontosPartida().get(ControllerOperadorMalha.PONTO_PARTIDA_DIREITA);
                         viaInicial = pontoPartida.get(random.nextInt(pontoPartida.size()));
                         viaInicial.adicionaVeiculo(veiculo);
                         veiculo.setRodando(true);
                         sucesso = true;
                         break;
                     case Via.SENTIDO_BAIXO:
-                        pontoPartida = controller.getPontosPartida().get(Via.SENTIDO_BAIXO - 1);
+                        pontoPartida = controller.getPontosPartida().get(ControllerOperadorMalha.PONTO_PARTIDA_BAIXO);
                         viaInicial = pontoPartida.get(random.nextInt(pontoPartida.size()));
                         viaInicial.adicionaVeiculo(veiculo);
                         veiculo.setRodando(true);
                         sucesso = true;
                         break;
                     case Via.SENTIDO_ESQUERDA:
-                        pontoPartida = controller.getPontosPartida().get(Via.SENTIDO_ESQUERDA - 1);
+                        pontoPartida = controller.getPontosPartida().get(ControllerOperadorMalha.PONTO_PARTIDA_ESQUERDA);
                         viaInicial = pontoPartida.get(random.nextInt(pontoPartida.size()));
                         viaInicial.adicionaVeiculo(veiculo);
                         veiculo.setRodando(true);
@@ -164,22 +164,15 @@ public class ControllerOperadorVeiculoMalha {
     }
     
     private void andarCruzamento(Via viaAtual, Via via){
-        List<List<Via>> caminhosAlternativos = new ArrayList();
-        List<Via> listaViaDefault            = new ArrayList();
-        
-        caminhosAlternativos.add(listaViaDefault);
-        defineAlternativaCruzamento(caminhosAlternativos, via, 0);
-        
-        Random random              = new Random();
-        int totalAlternativas      = caminhosAlternativos.size();
-        List<Via> caminho          = caminhosAlternativos.get(random.nextInt(totalAlternativas));
+        List<Via> caminho = new ArrayList();
+        defineAlternativaCruzamento(caminho, via);
         if(caminho.size() == getCaminhosReservados(caminho).size()){
             for(Via viaAndar : caminho){
                 viaAtual.retiraVeiculo();
                 viaAndar.adicionaVeiculo(veiculo);
                 viaAtual = viaAndar;
+                controller.notificarViaAlterada();
             }
-            controller.notificarViaAlterada();
         }
     }
     
@@ -194,76 +187,189 @@ public class ControllerOperadorVeiculoMalha {
         return caminhoReservado;
     }
     
-    private void defineAlternativaCruzamento(List<List<Via>> caminhosAlternativos, Via viaAlternativa, int alternativa){
-        List<Via> via = new ArrayList();
-        int alternativaPlus;
+    private void defineAlternativaCruzamento(List<Via> caminhosAlternativos, Via viaAlternativa){
+        Random random = new Random();
         switch(viaAlternativa.getSentido()){
             case Via.SENTIDO_CRUZAMENTO_CIMA:
-                caminhosAlternativos.get(alternativa).add(viaAlternativa);
-                via.add(malha.getVia(viaAlternativa.getLinha() - 1, viaAlternativa.getColuna()));
-                defineAlternativaCruzamento(caminhosAlternativos, via.get(0), alternativa);
-                break;
-            case Via.SENTIDO_CRUZAMENTO_DIREITA:
-                caminhosAlternativos.get(alternativa).add(viaAlternativa);
-                via.add(malha.getVia(viaAlternativa.getLinha(), viaAlternativa.getColuna() + 1));
-                defineAlternativaCruzamento(caminhosAlternativos, via.get(0), alternativa);
-                break;
-            case Via.SENTIDO_CRUZAMENTO_BAIXO:
-                caminhosAlternativos.get(alternativa).add(viaAlternativa);
-                via.add(malha.getVia(viaAlternativa.getLinha() + 1, viaAlternativa.getColuna()));
-                defineAlternativaCruzamento(caminhosAlternativos, via.get(0), alternativa);
-                break;
-            case Via.SENTIDO_CRUZAMENTO_ESQUERDA:
-                caminhosAlternativos.get(alternativa).add(viaAlternativa);
-                via.add(malha.getVia(viaAlternativa.getLinha(), viaAlternativa.getColuna() - 1));
-                defineAlternativaCruzamento(caminhosAlternativos, via.get(0), alternativa);
-                break;
-            case Via.SENTIDO_CRUZAMENTO_CIMA_DIREITA:
-                caminhosAlternativos.get(alternativa).add(viaAlternativa);
-                caminhosAlternativos.add(new ArrayList(caminhosAlternativos.get(alternativa)));
-                via.add(malha.getVia(viaAlternativa.getLinha() - 1, viaAlternativa.getColuna()));
-                via.add(malha.getVia(viaAlternativa.getLinha(), viaAlternativa.getColuna() + 1));
-                alternativaPlus = alternativa + 1;
-                for(int i = 0; i < via.size(); i++){
-                    defineAlternativaCruzamento(caminhosAlternativos, via.get(i), alternativaPlus);
-                    alternativaPlus++;
+                switch(random.nextInt(2)){
+                    case 0:
+                        defineCruzamentoCima(caminhosAlternativos, viaAlternativa, CRUZAMENTO_MODERADO);
+                        break;
+                    case 1:
+                        defineCruzamentoEsquerda(caminhosAlternativos, viaAlternativa, CRUZAMENTO_PESADO);
+                        break;
                 }
                 break;
+            case Via.SENTIDO_CRUZAMENTO_DIREITA:
+                switch(random.nextInt(2)){
+                    case 0:
+                        defineCruzamentoDireita(caminhosAlternativos, viaAlternativa, CRUZAMENTO_MODERADO);
+                        break;
+                    case 1:
+                        defineCruzamentoCima(caminhosAlternativos, viaAlternativa, CRUZAMENTO_PESADO);
+                        break;
+                }
+                break;
+            case Via.SENTIDO_CRUZAMENTO_BAIXO:
+                switch(random.nextInt(2)){
+                    case 0:
+                        defineCruzamentoBaixo(caminhosAlternativos, viaAlternativa, CRUZAMENTO_MODERADO);
+                        break;
+                    case 1:
+                        defineCruzamentoDireita(caminhosAlternativos, viaAlternativa, CRUZAMENTO_PESADO);
+                        break;
+                }
+                break;
+            case Via.SENTIDO_CRUZAMENTO_ESQUERDA:
+                switch(random.nextInt(2)){
+                    case 0:
+                        defineCruzamentoEsquerda(caminhosAlternativos, viaAlternativa, CRUZAMENTO_MODERADO);
+                        break;
+                    case 1:
+                        defineCruzamentoBaixo(caminhosAlternativos, viaAlternativa, CRUZAMENTO_PESADO);
+                        break;
+                }
+                break;
+            case Via.SENTIDO_CRUZAMENTO_CIMA_DIREITA:
+                switch(random.nextInt(3)){
+                    case 0:
+                        defineCruzamentoEsquerda(caminhosAlternativos, viaAlternativa, CRUZAMENTO_PESADO);
+                        break;
+                    case 1:
+                        defineCruzamentoCima(caminhosAlternativos, viaAlternativa, CRUZAMENTO_MODERADO);
+                        break;
+                    case 2:
+                        defineCruzamentoDireita(caminhosAlternativos, viaAlternativa, CRUZAMENTO_LEVE);
+                        break;
+                }
+                break;
+                           
             case Via.SENTIDO_CRUZAMENTO_CIMA_ESQUERDA:
-                caminhosAlternativos.get(alternativa).add(viaAlternativa);
-                caminhosAlternativos.add(new ArrayList(caminhosAlternativos.get(alternativa)));
-                via.add(malha.getVia(viaAlternativa.getLinha() - 1, viaAlternativa.getColuna()));
-                via.add(malha.getVia(viaAlternativa.getLinha(), viaAlternativa.getColuna() - 1));
-                alternativaPlus = alternativa + 1;
-                for(int i = 0; i < via.size(); i++){
-                    defineAlternativaCruzamento(caminhosAlternativos, via.get(i), alternativaPlus);
-                    alternativaPlus++;
+                switch(random.nextInt(3)){
+                    case 0:
+                        defineCruzamentoBaixo(caminhosAlternativos, viaAlternativa, CRUZAMENTO_PESADO);
+                        break;
+                    case 1:
+                        defineCruzamentoEsquerda(caminhosAlternativos, viaAlternativa, CRUZAMENTO_MODERADO);
+                        break;
+                    case 2:
+                        defineCruzamentoCima(caminhosAlternativos, viaAlternativa, CRUZAMENTO_LEVE);
+                        break;
                 }
                 break;
             case Via.SENTIDO_CRUZAMENTO_DIREITA_BAIXO:
-                caminhosAlternativos.get(alternativa).add(viaAlternativa);
-                caminhosAlternativos.add(new ArrayList(caminhosAlternativos.get(alternativa)));
-                via.add(malha.getVia(viaAlternativa.getLinha(), viaAlternativa.getColuna() + 1));
-                via.add(malha.getVia(viaAlternativa.getLinha() + 1, viaAlternativa.getColuna()));
-                alternativaPlus = alternativa + 1;
-                for(int i = 0; i < via.size(); i++){
-                    defineAlternativaCruzamento(caminhosAlternativos, via.get(i), alternativaPlus);
-                    alternativaPlus++;
+                switch(random.nextInt(3)){
+                    case 0:
+                        defineCruzamentoCima(caminhosAlternativos, viaAlternativa, CRUZAMENTO_PESADO);
+                        break;
+                    case 1:
+                        defineCruzamentoDireita(caminhosAlternativos, viaAlternativa, CRUZAMENTO_MODERADO);
+                        break;
+                    case 2:
+                        defineCruzamentoBaixo(caminhosAlternativos, viaAlternativa, CRUZAMENTO_LEVE);
+                        break;
                 }
-                break;
+                break;      
             case Via.SENTIDO_CRUZAMENTO_BAIXO_ESQUERDA:
-                caminhosAlternativos.get(alternativa).add(viaAlternativa);
-                caminhosAlternativos.add(new ArrayList(caminhosAlternativos.get(alternativa)));
-                via.add(malha.getVia(viaAlternativa.getLinha() + 1, viaAlternativa.getColuna()));
-                via.add(malha.getVia(viaAlternativa.getLinha(), viaAlternativa.getColuna() - 1));
-                alternativaPlus = alternativa + 1;
-                for(int i = 0; i < via.size(); i++){
-                    defineAlternativaCruzamento(caminhosAlternativos, via.get(i), alternativaPlus);
-                    alternativaPlus++;
+                switch(random.nextInt(3)){
+                    case 0:
+                        defineCruzamentoDireita(caminhosAlternativos, viaAlternativa, CRUZAMENTO_PESADO);
+                        break;
+                    case 1:
+                        defineCruzamentoBaixo(caminhosAlternativos, viaAlternativa, CRUZAMENTO_MODERADO);
+                        break;
+                    case 2:
+                        defineCruzamentoEsquerda(caminhosAlternativos, viaAlternativa, CRUZAMENTO_LEVE);
+                        break;
                 }
+                break;      
+        }
+    }
+    
+    private void iniciaCaminhosAlternativos(List<List<Via>> caminhosAlternativos, Via viaAlternativa, int qtdCaminhos){
+        for(int i = 0; i < qtdCaminhos; i++){
+            caminhosAlternativos.add(new ArrayList<Via>());
+            caminhosAlternativos.get(i).add(viaAlternativa);
+        }
+    }
+    
+    private void defineCruzamentoCima(List<Via> caminhosAlternativos, Via viaAlternativa, int gravidadeCruzamento){
+        switch(gravidadeCruzamento){
+            case CRUZAMENTO_LEVE:
+                caminhosAlternativos.add(viaAlternativa);
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() - 1, viaAlternativa.getColuna()));
                 break;
-            default:
-                caminhosAlternativos.get(alternativa).add(viaAlternativa);
+            case CRUZAMENTO_MODERADO:
+                caminhosAlternativos.add(viaAlternativa);
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() - 1, viaAlternativa.getColuna()));
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() - 2, viaAlternativa.getColuna()));
+                break;
+            case CRUZAMENTO_PESADO:
+                caminhosAlternativos.add(viaAlternativa);
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha(), viaAlternativa.getColuna() + 1));
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() - 1, viaAlternativa.getColuna() + 1));
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() - 2, viaAlternativa.getColuna() + 1));
+                break;
+        }
+    }
+    
+    private void defineCruzamentoDireita(List<Via> caminhosAlternativos, Via viaAlternativa, int gravidadeCruzamento){
+        switch(gravidadeCruzamento){
+            case CRUZAMENTO_LEVE:
+                caminhosAlternativos.add(viaAlternativa);
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha(), viaAlternativa.getColuna() + 1));
+                break;
+            case CRUZAMENTO_MODERADO:
+                caminhosAlternativos.add(viaAlternativa);
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha(), viaAlternativa.getColuna() + 1));
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha(), viaAlternativa.getColuna() + 2));
+                break;
+            case CRUZAMENTO_PESADO:
+                caminhosAlternativos.add(viaAlternativa);
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() + 1, viaAlternativa.getColuna()));
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() + 1, viaAlternativa.getColuna() + 1));
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() + 1, viaAlternativa.getColuna() + 2));
+                break;
+        }
+    }
+    
+    private void defineCruzamentoBaixo(List<Via> caminhosAlternativos, Via viaAlternativa, int gravidadeCruzamento){
+        switch(gravidadeCruzamento){
+            case CRUZAMENTO_LEVE:
+                caminhosAlternativos.add(viaAlternativa);
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() + 1, viaAlternativa.getColuna()));
+                break;
+            case CRUZAMENTO_MODERADO:
+                caminhosAlternativos.add(viaAlternativa);
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() + 1, viaAlternativa.getColuna()));
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() + 2, viaAlternativa.getColuna()));
+                break;
+            case CRUZAMENTO_PESADO:
+                caminhosAlternativos.add(viaAlternativa);
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha(), viaAlternativa.getColuna() - 1));
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() + 1, viaAlternativa.getColuna() - 1));
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() + 2, viaAlternativa.getColuna() - 1));
+                break;
+        }
+    }
+    
+    private void defineCruzamentoEsquerda(List<Via> caminhosAlternativos, Via viaAlternativa, int gravidadeCruzamento){
+        switch(gravidadeCruzamento){
+            case CRUZAMENTO_LEVE:
+                caminhosAlternativos.add(viaAlternativa);
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha(), viaAlternativa.getColuna() - 1));
+                break;
+            case CRUZAMENTO_MODERADO:
+                caminhosAlternativos.add(viaAlternativa);
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha(), viaAlternativa.getColuna() - 1));
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha(), viaAlternativa.getColuna() - 2));
+                break;
+            case CRUZAMENTO_PESADO:
+                caminhosAlternativos.add(viaAlternativa);
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() - 1, viaAlternativa.getColuna()));
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() - 1, viaAlternativa.getColuna() - 1));
+                caminhosAlternativos.add(malha.getVia(viaAlternativa.getLinha() - 1, viaAlternativa.getColuna() - 2));
+                break;
         }
     }
 }
