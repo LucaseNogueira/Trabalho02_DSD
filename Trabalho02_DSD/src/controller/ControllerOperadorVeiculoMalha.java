@@ -70,6 +70,7 @@ public class ControllerOperadorVeiculoMalha {
         while(!sucesso){
             sucesso = spawnarVeiculo();
         }
+        controller.criarVeiculo();
     }
     
     private void parar(){

@@ -63,6 +63,7 @@ public class ControllerOperadorMalha {
             Veiculo veiculo = new Veiculo();
             veiculo.setIntervaloCriacao(this.intervalo);
             veiculo.start();
+            qtdVeiculosRodando++;
         }
     }
     
